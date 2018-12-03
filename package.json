@@ -8,7 +8,9 @@
     "lint": "eslint ./",
     "pre-commit": "npm t",
     "posttest": "npm run lint",
-    "make:test-db": "psql -f ./db/seed/setup_test.sql"
+    "make:test-db": "psql -f ./db/seed/setup_test.sql",
+    "migrate:latest": "npx knex migrate:latest",
+    "seed:test": "npx knex seed:run --env test"
   },
   "repository": {
     "type": "git",
