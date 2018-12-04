@@ -11,7 +11,7 @@
     "make:test-db": "psql -f ./db/seed/setup_test.sql",
     "migrate:latest-test": "npx knex migrate:latest --env test",
     "migrate:rollback-test": "npx knex migrate:rollback --env test",
-    "seed:test": "npx knex seed:run --env test"
+    "seed:test": "npm run migrate:rollback-test && npm run migrate:latest-test && NODE_ENV=test knex seed:run --env test"
   },
   "repository": {
     "type": "git",

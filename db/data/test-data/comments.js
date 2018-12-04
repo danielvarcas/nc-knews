@@ -1,10 +1,11 @@
 module.exports = [{
   body:
     "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-  belongs_to: "They're not exactly dogs, are they?",
-  created_by: 'butter_bridge',
+  belongs_to: "They're not exactly dogs, are they?", // delete this
+  created_by: 'butter_bridge', // should be user_id
   votes: 16,
-  created_at: 1511354163389,
+  created_at: 1511354163389, // wrong format
+  // missing article_id
 },
 {
   body:

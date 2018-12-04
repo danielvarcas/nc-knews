@@ -1,15 +1,24 @@
-const formatComments = (comments, articleRows) => {
-  const formattedComments = comments.map((comment) => {
-    const formattedComment = { ...comment };
+const { formatDate } = require('./formatDate');
 
-    formattedComment.user_id = articleRows
-      .filter(() => formattedComment.created_by === articleRows.title)
-      .topic_id;
+const formatComments = (commentsData, userRows, articleRows) => {
+  const comments = commentsData.map((commentsDatum) => {
+    const comment = { ...commentsDatum };
 
-    delete formattedComment.belongs_to;
-    return formattedComment;
+    comment.user_id = userRows
+      .find(userRow => userRow.username === comment.created_by)
+      .user_id;
+
+    comment.article_id = articleRows
+      .find(articleRow => articleRow.title === comment.belongs_to)
+      .article_id;
+
+    comment.created_at = formatDate(comment.created_at);
+
+    delete comment.created_by;
+    delete comment.belongs_to;
+    return comment;
   });
-  return formattedComments;
+  return comments;
 };
 
 module.exports = { formatComments };

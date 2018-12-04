@@ -5,6 +5,8 @@ const {
 } = require('../data/index');
 
 exports.seed = function (knex, Promise) {
+  console.log('=== BEGIN SEED ===');
+  console.log('Deleting all table data...');
   const deleteTablesPromises = ['topics', 'users', 'articles', 'comments'].map(tableName => knex(tableName).del());
   return Promise.all(deleteTablesPromises)
     .then(() => {
@@ -14,7 +16,7 @@ exports.seed = function (knex, Promise) {
       return knex('topics').insert(topicData).returning('*');
     })
     .then(([topicRows]) => {
-      // console.log(topicRows);
+      // console.log(topicRows[0]);
       console.log('Topic data insertion complete!');
       console.log('Inserting user data...');
 
@@ -22,7 +24,7 @@ exports.seed = function (knex, Promise) {
       return Promise.all([topicRows, userPromise]);
     })
     .then(([topicRows, userRows]) => {
-      // console.log(userRows);
+      // console.log(userRows[0]);
       console.log('User data insertion complete!');
       console.log('Inserting article data...');
 
@@ -30,14 +32,17 @@ exports.seed = function (knex, Promise) {
       return Promise.all([topicRows, userRows, articlePromise]);
     })
     .then(([topicRows, userRows, articleRows]) => {
-      console.log(articleRows[0]);
+      // console.log(articleRows[0]);
       console.log('Article data insertion complete!');
       console.log('Inserting comment data...');
 
-      // return knex('comments').insert(formatComments(commentData, userRows)).returning('*');
+      const commentPromise = knex('comments').insert(formatComments(commentData, userRows, articleRows)).returning('*');
+      return Promise.all([topicRows, userRows, articleRows, commentPromise]);
     })
-    .then((commentRows) => {
-      console.log(commentRows);
+    .then(([topicRows, userRows, articleRows, commentRows]) => {
+      // console.log(commentRows[0]);
       console.log('Comment data insertion complete!');
+      console.log('=== SEED COMPLETE ===');
+      return Promise.all([topicRows, userRows, articleRows, commentRows]);
     });
 };
