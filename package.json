@@ -9,7 +9,8 @@
     "pre-commit": "npm t",
     "posttest": "npm run lint",
     "make:test-db": "psql -f ./db/seed/setup_test.sql",
-    "migrate:latest": "npx knex migrate:latest",
+    "migrate:latest-test": "npx knex migrate:latest --env test",
+    "migrate:rollback-test": "npx knex migrate:rollback --env test",
     "seed:test": "npx knex seed:run --env test"
   },
   "repository": {
