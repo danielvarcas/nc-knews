@@ -51,8 +51,8 @@ describe('/api', () => {
     });
 
     describe('/:topic/articles', () => {
-      it.only('200 GET - responds with an array of article objects for a given object', () => request(app)
-        .get(`${pathToTopics}/mitch/articles`)
+      it('200 GET - responds with an array of article objects for a given object', () => request(app)
+        .get(`${pathToTopics}/mitch/articles?limit=20`)
         .expect(200)
         .then(({ body }) => {
           expect(body.articles[0]).to.have.all.keys('author', 'title', 'article_id', 'votes', 'comment_count', 'created_at', 'topic');
