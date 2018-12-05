@@ -1,11 +1,11 @@
 process.env.NODE_ENV = 'test';
 const express = require('express');
-
-const app = express();
 const bodyParser = require('body-parser');
 const apiRouter = require('./routes/apiRouter');
-
 const { handle422 } = require('./middleware/errorHandling');
+
+const app = express();
+
 
 app.use(bodyParser.json());
 app.use('/api', apiRouter);

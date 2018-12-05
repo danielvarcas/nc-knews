@@ -95,4 +95,15 @@ describe('/api', () => {
       });
     });
   });
+
+  describe('/articles', () => {
+    it('200 GET - responds with an array of article objects with defaulted queries', () => request(app)
+      .get('/api/articles')
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).to.have.length(10);
+        expect(articles[0]).to.have.all.keys('author', 'title', 'article_id', 'votes', 'comment_count', 'created_at', 'topic');
+      }));
+  });
 });
