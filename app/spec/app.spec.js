@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'test';
 const { expect } = require('chai');
 const request = require('supertest');
-const { app } = require('../app');
+const app = require('../app');
 const connection = require('../../db/connection');
 
 describe('/api', () => {
@@ -48,6 +48,16 @@ describe('/api', () => {
         .post(pathToTopics)
         .send(newTopic)
         .expect(422);
+    });
+
+    describe('/:topic/articles', () => {
+      it.only('200 GET - responds with an array of article objects for a given object', () => request(app)
+        .get(`${pathToTopics}/mitch/articles`)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles[0]).to.have.all.keys('author', 'title', 'article_id', 'votes', 'comment_count', 'created_at', 'topic');
+          expect(body.articles).to.have.length(11);
+        }));
     });
   });
 });
