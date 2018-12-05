@@ -18,3 +18,9 @@ exports.getArticles = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.postArticle = (req, res, next) => {
+  connection('articles').insert(req.body).returning('*')
+    .then(newArticle => res.status(201).send({ newArticle }))
+    .catch(next);
+};

@@ -58,10 +58,30 @@ describe('/api', () => {
           expect(body.articles[0]).to.have.all.keys('author', 'title', 'article_id', 'votes', 'comment_count', 'created_at', 'topic');
           expect(body.articles).to.have.length(10);
         }));
+
       it('200 GET - returns an empty array if no articles found (including if topic does not exist)', () => request(app)
         .get(`${pathToTopics}/existential_crises/articles`)
         .expect(200)
         .then(({ body }) => expect(body.articles).to.eql([])));
+
+      it('201 POST - accepts an object containing a title, body and user_id and responds with posted article', () => {
+        const anArticle = {
+          title: 'Hello world',
+          body: 'How are you?',
+          user_id: 1,
+        };
+        return request(app)
+          .post(`${pathToTopics}/cats/articles`)
+          .send(anArticle)
+          .expect(201)
+          .then(({ body }) => {
+            const newArticle = body.newArticle[0];
+            expect(newArticle).to.have.all.keys('article_id', 'title', 'body', 'votes', 'topic', 'user_id', 'created_at');
+            expect(newArticle.title).to.equal('Hello world');
+            expect(newArticle.body).to.equal('How are you?');
+            expect(newArticle.user_id).to.equal(1);
+          });
+      });
     });
   });
 });
