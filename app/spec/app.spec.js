@@ -12,6 +12,7 @@ describe('/api', () => {
 
   describe('/topics', () => {
     const pathToTopics = '/api/topics';
+
     it('200 GET: responds with an array of topic objects', () => request(app)
       .get(pathToTopics)
       .expect(200)
@@ -19,7 +20,7 @@ describe('/api', () => {
         expect(body.topics[0]).to.have.all.keys('description', 'slug');
         expect(body.topics).to.have.length(2);
       }));
-    // 405
+
     it('201 POST: accepts an object containing slug and description and responds with posted topic object', () => {
       const newTopic = {
         description: 'A Coding Education Like No Other',
@@ -30,7 +31,6 @@ describe('/api', () => {
         .send(newTopic)
         .expect(201)
         .then(({ body }) => {
-          console.log('>>>>', body, '<<<<');
           expect(body.newTopic[0]).to.have.all.keys('description', 'slug');
         })
         .then(() => request(app)
@@ -38,6 +38,16 @@ describe('/api', () => {
         .then(({ body }) => {
           expect(body.topics).to.have.length(3);
         });
+    });
+    it('422 POST - rejects objects where slug (pkey) already exists in database', () => {
+      const newTopic = {
+        description: 'meow',
+        slug: 'cats',
+      };
+      return request(app)
+        .post(pathToTopics)
+        .send(newTopic)
+        .expect(422);
     });
   });
 });
