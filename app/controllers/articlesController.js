@@ -14,7 +14,6 @@ exports.getArticles = (req, res, next) => {
     .groupBy('articles.article_id', 'users.user_id')
     .count({ comment_count: 'comments.comment_id' })
     .then((articles) => {
-      // console.log(articles);
       res.status(200).send({ articles });
     })
     .catch(next);

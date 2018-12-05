@@ -58,6 +58,10 @@ describe('/api', () => {
           expect(body.articles[0]).to.have.all.keys('author', 'title', 'article_id', 'votes', 'comment_count', 'created_at', 'topic');
           expect(body.articles).to.have.length(10);
         }));
+      it('200 GET - returns an empty array if no articles found (including if topic does not exist)', () => request(app)
+        .get(`${pathToTopics}/existential_crises/articles`)
+        .expect(200)
+        .then(({ body }) => expect(body.articles).to.eql([])));
     });
   });
 });

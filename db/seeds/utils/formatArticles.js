@@ -13,6 +13,7 @@ const formatArticles = (articleData, usersRows) => {
     delete article.created_by;
     return article;
   });
+  // console.log(articles);
   return articles;
 };
 
