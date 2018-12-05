@@ -52,7 +52,7 @@ describe('/api', () => {
 
     describe('/:topic/articles', () => {
       it('200 GET - responds with an array of article objects for a given object with defaulted queries available', () => request(app)
-        .get(`${pathToTopics}/mitch/articles`)
+        .get('/api/topics/mitch/articles')
         .expect(200)
         .then(({ body }) => {
           expect(body.articles[0]).to.have.all.keys('author', 'title', 'article_id', 'votes', 'comment_count', 'created_at', 'topic');
@@ -60,7 +60,7 @@ describe('/api', () => {
         }));
 
       it('200 GET - returns an empty array if no articles found (including if topic does not exist)', () => request(app)
-        .get(`${pathToTopics}/existential_crises/articles`)
+        .get('/api/topics/existential_crises/articles')
         .expect(200)
         .then(({ body }) => expect(body.articles).to.eql([])));
 
@@ -71,16 +71,27 @@ describe('/api', () => {
           user_id: 1,
         };
         return request(app)
-          .post(`${pathToTopics}/cats/articles`)
+          .post('/api/topics/cats/articles')
           .send(anArticle)
           .expect(201)
           .then(({ body }) => {
-            const newArticle = body.newArticle[0];
-            expect(newArticle).to.have.all.keys('article_id', 'title', 'body', 'votes', 'topic', 'user_id', 'created_at');
-            expect(newArticle.title).to.equal('Hello world');
-            expect(newArticle.body).to.equal('How are you?');
-            expect(newArticle.user_id).to.equal(1);
+            const { article } = body;
+            expect(article).to.have.all.keys('article_id', 'title', 'body', 'votes', 'topic', 'user_id', 'created_at');
+            expect(article.title).to.equal('Hello world');
+            expect(article.body).to.equal('How are you?');
           });
+      });
+
+      it('404 POST - rejects a new post if topic does not exist', () => {
+        const anArticle = {
+          title: 'The first rule of Fight Club...',
+          body: 'You do not talk about Fight Club.',
+          user_id: 1,
+        };
+        return request(app)
+          .post('/api/topics/fightclub/articles')
+          .send(anArticle)
+          .expect(404);
       });
     });
   });

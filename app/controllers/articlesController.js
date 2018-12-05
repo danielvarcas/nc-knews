@@ -20,7 +20,12 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.postArticle = (req, res, next) => {
-  connection('articles').insert(req.body).returning('*')
-    .then(newArticle => res.status(201).send({ newArticle }))
+  const articleToPost = req.body;
+  articleToPost.topic = req.params.topic;
+  return connection('articles').insert(articleToPost).returning('*')
+    .then((postedArticle) => {
+      const article = { ...postedArticle[0] };
+      res.status(201).send({ article });
+    })
     .catch(next);
 };

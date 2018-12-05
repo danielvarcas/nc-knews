@@ -7,6 +7,7 @@ topicsRouter.route('/')
   .get(getTopics)
   .post(postTopic);
 
+
 topicsRouter.route('/:topic/articles')
   .get(getArticles)
   .post(postArticle);

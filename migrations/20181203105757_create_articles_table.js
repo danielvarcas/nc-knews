@@ -5,8 +5,8 @@ exports.up = function (knex, Promise) {
     table.string('title');
     table.text('body');
     table.integer('votes').defaultTo(0);
-    table.string('topic').references('topics.slug');
-    table.integer('user_id').references('users.user_id');
+    table.string('topic').references('topics.slug').notNullable();
+    table.integer('user_id').references('users.user_id').notNullable();
     table.string('created_at').defaultTo(knex.fn.now());
   });
 };
