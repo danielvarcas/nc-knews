@@ -235,15 +235,17 @@ describe('/api', () => {
             });
         });
 
-        it('200 PATCH - accepts an object { inc_votes: newVote } and changes comment votes by newVote', () => {
-          const aVote = { inc_votes: 4 };
-          return request(app)
-            .patch('/api/articles/1/comments/1')
-            .send(aVote)
-            .expect(200)
-            .then(({ body }) => {
-              expect(body.comment[0].votes).to.equal(20);
-            });
+        describe('/:comment_id', () => {
+          it('200 PATCH - accepts an object { inc_votes: newVote } and changes comment votes by newVote', () => {
+            const aVote = { inc_votes: 4 };
+            return request(app)
+              .patch('/api/articles/1/comments/1')
+              .send(aVote)
+              .expect(200)
+              .then(({ body }) => {
+                expect(body.comment[0].votes).to.equal(20);
+              });
+          });
         });
       });
     });
