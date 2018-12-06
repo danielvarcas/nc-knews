@@ -31,3 +31,13 @@ exports.getComments = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.postComment = (req, res, next) => connection('comments').insert({
+  ...req.body,
+  article_id: req.params.article_id,
+})
+  .returning('*')
+  .then((comment) => {
+    res.status(201).send({ comment });
+  })
+  .catch(next);

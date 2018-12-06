@@ -208,6 +208,32 @@ describe('/api', () => {
                 'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
             });
           }));
+
+        it.only('200 POST - accepts an object with a user_id and body and responds with the posted comment', () => {
+          const newComment = {
+            user_id: 1,
+            body: 'Yayyyyyyyy :D',
+          };
+          return request(app)
+            .post('/api/articles/1/comments')
+            .send(newComment)
+            .expect(201)
+            .then(({ body }) => {
+              expect(body.comment[0]).to.have.all.keys(
+                'article_id',
+                'comment_id',
+                'votes',
+                'created_at',
+                'user_id',
+                'body',
+              );
+            })
+            .then(() => request(app)
+              .get('/api/articles/1/comments?limit=100'))
+            .then(({ body }) => {
+              expect(body.comments).to.have.length(14);
+            });
+        });
       });
     });
   });
