@@ -157,7 +157,7 @@ describe('/api', () => {
           expect(body.articles).to.eql([]);
         }));
 
-      it.only('200 PATCH - accepts an object which changes article\'s votes by newVote, then returns the updated article', () => {
+      it('200 PATCH - accepts an object which changes article\'s votes by newVote, then returns the updated article', () => {
         const aVote = { inc_votes: 10 };
         return request(app)
           .patch('/api/articles/1')
