@@ -185,6 +185,22 @@ describe('/api', () => {
           .then(({ body }) => {
             expect(body.articles).to.have.length(11);
           })));
+
+      describe('/comments', () => {
+        it('200 GET - responds with an array of comments for the given article_id', () => request(app)
+          .get('/api/articles/1/comments')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.comments).to.have.length(13);
+            expect(body.comments[0]).to.have.all.keys(
+              'comment_id',
+              'votes',
+              'created_at',
+              'author',
+              'body',
+            );
+          }));
+      });
     });
   });
 });
