@@ -262,4 +262,18 @@ describe('/api', () => {
       });
     });
   });
+  describe('/users', () => {
+    it('200 GET - responds with an array of user objects', () => request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users).to.have.length(3);
+        expect(body.users[0]).to.have.all.keys(
+          'user_id',
+          'username',
+          'avatar_url',
+          'name',
+        );
+      }));
+  });
 });
