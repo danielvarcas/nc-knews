@@ -55,7 +55,15 @@ describe('/api', () => {
         .get('/api/topics/mitch/articles')
         .expect(200)
         .then(({ body }) => {
-          expect(body.articles[0]).to.have.all.keys('author', 'title', 'article_id', 'votes', 'comment_count', 'created_at', 'topic');
+          expect(body.articles[0]).to.have.all.keys(
+            'author',
+            'title',
+            'article_id',
+            'votes',
+            'comment_count',
+            'created_at',
+            'topic',
+          );
           expect(body.articles).to.have.length(10);
         }));
 
@@ -76,7 +84,15 @@ describe('/api', () => {
           .expect(201)
           .then(({ body }) => {
             const { article } = body;
-            expect(article).to.have.all.keys('article_id', 'title', 'body', 'votes', 'topic', 'user_id', 'created_at');
+            expect(article).to.have.all.keys(
+              'article_id',
+              'title',
+              'body',
+              'votes',
+              'topic',
+              'user_id',
+              'created_at',
+            );
             expect(article.title).to.equal('Hello world');
             expect(article.body).to.equal('How are you?');
           });
@@ -103,7 +119,37 @@ describe('/api', () => {
       .then(({ body }) => {
         const { articles } = body;
         expect(articles).to.have.length(10);
-        expect(articles[0]).to.have.all.keys('author', 'title', 'article_id', 'votes', 'comment_count', 'created_at', 'topic');
+        expect(articles[0]).to.have.all.keys(
+          'author',
+          'title',
+          'article_id',
+          'votes',
+          'comment_count',
+          'created_at',
+          'topic',
+        );
       }));
+
+    describe('/:article_id', () => {
+      it.only('200 GET - responds with an article object', () => request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article).to.have.length(1);
+          const article = body.article[0];
+          expect(article).to.have.all.keys(
+            'article_id',
+            'author',
+            'title',
+            'votes',
+            'body',
+            'comment_count',
+            'created_at',
+            'topic',
+          );
+          expect(article.author).to.equal('butter_bridge');
+          expect(article.votes).to.equal(100);
+        }));
+    });
   });
 });
