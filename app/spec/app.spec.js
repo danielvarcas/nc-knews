@@ -168,6 +168,9 @@ describe('/api', () => {
             expect(article.votes).to.equal(110);
           });
       });
+      it('404 PATCH - returns error 404 if article does not exist', () => request(app)
+        .patch('/api/articles/9999')
+        .expect(404));
     });
   });
 });
