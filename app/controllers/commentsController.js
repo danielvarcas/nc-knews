@@ -50,3 +50,11 @@ exports.voteComment = (req, res, next) => connection('comments')
     res.status(200).send({ comment });
   })
   .catch(next);
+
+exports.deleteComment = (req, res, next) => connection('comments')
+  .where('comments.article_id', req.params.article_id)
+  .andWhere('comments.comment_id', req.params.comment_id)
+  .del()
+  .then(() => {
+    res.status(200).send({ comment: {} });
+  });

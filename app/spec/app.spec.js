@@ -246,6 +246,18 @@ describe('/api', () => {
                 expect(body.comment[0].votes).to.equal(20);
               });
           });
+
+          it('200 DELETE - deletes comment by comment_id and returns an empty object', () => request(app)
+            .delete('/api/articles/1/comments/2')
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.comment).to.eql({});
+            })
+            .then(() => request(app)
+              .get('/api/articles/1/comments?limit=100')
+              .then(({ body }) => {
+                expect(body.comments).to.have.length(12);
+              })));
         });
       });
     });
