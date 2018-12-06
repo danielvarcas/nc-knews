@@ -150,6 +150,12 @@ describe('/api', () => {
           expect(article.author).to.equal('butter_bridge');
           expect(article.votes).to.equal(100);
         }));
+      it('200 GET - responds with an empty array if article_id does not exist in database', () => request(app)
+        .get('/api/articles/9999')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.eql([]);
+        }));
     });
   });
 });

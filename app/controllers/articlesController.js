@@ -16,7 +16,6 @@ exports.getArticles = (req, res, next) => {
         .select('title', 'articles.body');
     }
   };
-
   return connection('articles')
     .modify(getByTopic)
     .modify(getByArticleId)
