@@ -209,7 +209,7 @@ describe('/api', () => {
             });
           }));
 
-        it.only('200 POST - accepts an object with a user_id and body and responds with the posted comment', () => {
+        it('200 POST - accepts an object with a user_id and body and responds with the posted comment', () => {
           const newComment = {
             user_id: 1,
             body: 'Yayyyyyyyy :D',
