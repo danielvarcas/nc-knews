@@ -9,21 +9,30 @@ exports.getArticles = (req, res, next) => {
     if (req.params.topic) { queryBuilder.where({ topic: req.params.topic }); }
   };
 
-  connection.select(
-    'username AS author',
-    'articles.title',
-    'articles.article_id',
-    'articles.votes',
-    'articles.created_at',
-    'topic',
-  )
-    .from('articles')
+  const getByArticleId = (queryBuilder) => {
+    if (req.params.article_id) {
+      queryBuilder
+        .where('articles.article_id', req.params.article_id)
+        .select('title', 'articles.body');
+    }
+  };
+
+  return connection('articles')
+    .modify(getByTopic)
+    .modify(getByArticleId)
+    .select(
+      'username AS author',
+      'articles.title',
+      'articles.article_id',
+      'articles.votes',
+      'articles.created_at',
+      'topic',
+    )
     .limit(limit)
     .offset(p - 1)
     .orderBy(sort_criteria, sort_ascending ? 'asc' : 'desc')
     .leftJoin('users', 'articles.user_id', '=', 'users.user_id')
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
-    .modify(getByTopic)
     .groupBy('articles.article_id', 'users.user_id')
     .count({ comment_count: 'comments.comment_id' })
     .then((articles) => {
@@ -31,26 +40,6 @@ exports.getArticles = (req, res, next) => {
     })
     .catch(next);
 };
-
-exports.getArticleById = (req, res, next) => connection('articles')
-  .where('articles.article_id', req.params.article_id)
-  .select(
-    'articles.article_id',
-    'username AS author',
-    'title',
-    'articles.votes',
-    'articles.body',
-    'articles.created_at',
-    'topic',
-  )
-  .leftJoin('users', 'articles.user_id', '=', 'users.user_id')
-  .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
-  .groupBy('articles.article_id', 'comments.article_id', 'users.user_id')
-  .count({ comment_count: 'comments.comment_id' })
-  .then((article) => {
-    res.status(200).send({ article });
-  })
-  .catch(next);
 
 exports.postArticle = (req, res, next) => {
   const articleToPost = req.body;

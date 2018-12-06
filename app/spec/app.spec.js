@@ -135,8 +135,8 @@ describe('/api', () => {
         .get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
-          expect(body.article).to.have.length(1);
-          const article = body.article[0];
+          expect(body.articles).to.have.length(1);
+          const article = body.articles[0];
           expect(article).to.have.all.keys(
             'article_id',
             'author',
