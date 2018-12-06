@@ -16,6 +16,7 @@ exports.getArticles = (req, res, next) => {
         .select('title', 'articles.body');
     }
   };
+
   return connection('articles')
     .modify(getByTopic)
     .modify(getByArticleId)
@@ -50,3 +51,13 @@ exports.postArticle = (req, res, next) => {
     })
     .catch(next);
 };
+
+
+exports.updateVotes = (req, res, next) => connection('articles')
+  .where('articles.article_id', req.params.article_id)
+  .increment('votes', req.body.inc_votes)
+  .returning('*')
+  .then((article) => {
+    res.status(200).send({ article });
+  })
+  .catch(next);

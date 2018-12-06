@@ -156,6 +156,18 @@ describe('/api', () => {
         .then(({ body }) => {
           expect(body.articles).to.eql([]);
         }));
+
+      it.only('200 PATCH - accepts an object which changes article\'s votes by newVote, then returns the updated article', () => {
+        const aVote = { inc_votes: 10 };
+        return request(app)
+          .patch('/api/articles/1')
+          .send(aVote)
+          .expect(200)
+          .then(({ body }) => {
+            const article = body.article[0];
+            expect(article.votes).to.equal(110);
+          });
+      });
     });
   });
 });
