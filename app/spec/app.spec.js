@@ -131,7 +131,7 @@ describe('/api', () => {
       }));
 
     describe('/:article_id', () => {
-      it.only('200 GET - responds with an article object', () => request(app)
+      it('200 GET - responds with an article object', () => request(app)
         .get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
