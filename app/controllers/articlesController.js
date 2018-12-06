@@ -65,3 +65,13 @@ exports.updateVotes = (req, res, next) => connection('articles')
     } else res.status(200).send({ article });
   })
   .catch(next);
+
+exports.deleteArticle = (req, res, next) => connection('comments')
+  .where('comments.article_id', req.params.article_id)
+  .del()
+  .then(() => connection('articles')
+    .where('articles.article_id', req.params.article_id)
+    .del())
+  .then(() => {
+    res.status(200).send({ article: [] });
+  });
