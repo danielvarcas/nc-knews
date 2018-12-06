@@ -209,7 +209,7 @@ describe('/api', () => {
             });
           }));
 
-        it('200 POST - accepts an object with a user_id and body and responds with the posted comment', () => {
+        it('201 POST - accepts an object with a user_id and body and responds with the posted comment', () => {
           const newComment = {
             user_id: 1,
             body: 'Yayyyyyyyy :D',
@@ -232,6 +232,17 @@ describe('/api', () => {
               .get('/api/articles/1/comments?limit=100'))
             .then(({ body }) => {
               expect(body.comments).to.have.length(14);
+            });
+        });
+
+        it('200 PATCH - accepts an object { inc_votes: newVote } and changes comment votes by newVote', () => {
+          const aVote = { inc_votes: 4 };
+          return request(app)
+            .patch('/api/articles/1/comments/1')
+            .send(aVote)
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.comment[0].votes).to.equal(20);
             });
         });
       });
