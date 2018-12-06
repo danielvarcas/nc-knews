@@ -2,7 +2,7 @@ const connection = require('../../db/connection');
 
 exports.getArticles = (req, res, next) => {
   const {
-    limit = 10, sort_criteria = 'articles.created_at', sort_ascending = false, p = 1,
+    limit = 10, sort_by = 'articles.created_at', sort_ascending = false, p = 1,
   } = req.query;
 
   const getByTopic = (queryBuilder) => {
@@ -30,7 +30,7 @@ exports.getArticles = (req, res, next) => {
     )
     .limit(limit)
     .offset(p - 1)
-    .orderBy(sort_criteria, sort_ascending ? 'asc' : 'desc')
+    .orderBy(sort_by, sort_ascending ? 'asc' : 'desc')
     .leftJoin('users', 'articles.user_id', '=', 'users.user_id')
     .leftJoin('comments', 'articles.article_id', '=', 'comments.article_id')
     .groupBy('articles.article_id', 'users.user_id')

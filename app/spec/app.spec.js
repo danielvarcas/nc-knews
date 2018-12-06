@@ -191,7 +191,7 @@ describe('/api', () => {
           .get('/api/articles/1/comments')
           .expect(200)
           .then(({ body }) => {
-            expect(body.comments).to.have.length(13);
+            expect(body.comments).to.have.length(10);
             expect(body.comments[0]).to.have.all.keys(
               'comment_id',
               'votes',
@@ -199,6 +199,14 @@ describe('/api', () => {
               'author',
               'body',
             );
+            expect(body.comments[0]).to.eql({
+              comment_id: 2,
+              votes: 14,
+              created_at: '2016-11-22T00:00:00.000Z',
+              author: 'butter_bridge',
+              body:
+                'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+            });
           }));
       });
     });
