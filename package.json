@@ -13,7 +13,11 @@
     "migrate:latest-test": "npx knex migrate:latest --env test",
     "migrate:rollback-test": "npx knex migrate:rollback --env test",
     "seed:test": "npm run migrate:rollback-test && npm run migrate:latest-test && NODE_ENV=test knex seed:run --env test",
-    "lint-fix": "eslint --fix ./"
+    "lint-fix": "eslint --fix ./",
+    "seed:prod": "DB_URL=$(heroku config:get DATABASE_URL) knex seed:run --env production",
+    "migrate:latest:prod": "DB_URL=$(heroku config:get DATABASE_URL) knex migrate:latest --env production",
+    "migrate:rollback:prod": "DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback --env production",
+    "start": "node app/listen.js"
   },
   "repository": {
     "type": "git",
