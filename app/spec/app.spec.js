@@ -50,6 +50,22 @@ describe('/api', () => {
           expect(body.topics).to.have.length(3);
         });
     });
+
+    it('400 POST - rejects objects with extra properties', () => {
+      const badTopic = {
+        description: 'meow',
+        slug: 'cats',
+        bad: 'hi',
+      };
+      return request(app)
+        .post(pathToTopics)
+        .send(badTopic)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Invalid input. One or more keys of sent object do not exist as columns in database.');
+        });
+    });
+
     it('422 POST - rejects objects where slug (pkey) already exists in database', () => {
       const newTopic = {
         description: 'meow',
@@ -60,6 +76,7 @@ describe('/api', () => {
         .send(newTopic)
         .expect(422);
     });
+
     it('405 - returns error 405 for other requests', () => request(app)
       .put(pathToTopics)
       .expect(405)
@@ -67,6 +84,7 @@ describe('/api', () => {
         expect(body.message).to.equal('Method Not Allowed');
       }));
     // END /TOPICS TESTS
+
     describe('/:topic/articles', () => {
       it('200 GET - responds with an array of article objects for a given object with defaulted queries available', () => request(app)
         .get('/api/topics/mitch/articles')
@@ -124,7 +142,10 @@ describe('/api', () => {
         return request(app)
           .post('/api/topics/fightclub/articles')
           .send(anArticle)
-          .expect(404);
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Key is not present in table.');
+          });
       });
       it('405 - returns error 405 for other requests', () => request(app)
         .put('/api/topics/cats/articles')
