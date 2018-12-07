@@ -21,6 +21,7 @@ describe('/api', () => {
       expect(body.message).to.equal('Method Not Allowed');
     }));
   // END /API TESTS
+
   describe('/topics', () => {
     const pathToTopics = '/api/topics';
 
@@ -64,6 +65,7 @@ describe('/api', () => {
         });
     });
 
+    // This test captures same errors at other endpoints
     it('400 POST - rejects objects with extra properties', () => {
       const badTopic = {
         description: 'meow',
@@ -113,6 +115,13 @@ describe('/api', () => {
             'topic',
           );
           expect(body.articles).to.have.length(10);
+        }));
+
+      it('200 GET - ensures limit is not negative (sets to a minimum of 0)', () => request(app)
+        .get('/api/topics/mitch/articles?limit=-1')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.have.length(0);
         }));
 
       it('200 GET - returns an empty array if no articles found (including if topic does not exist)', () => request(app)

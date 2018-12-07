@@ -1,9 +1,10 @@
 const connection = require('../../db/connection');
 
 exports.getArticles = (req, res, next) => {
-  const {
-    limit = 10, sort_by = 'articles.created_at', sort_ascending = false, p = 1,
-  } = req.query;
+  const { sort_by = 'articles.created_at', sort_ascending = false, p = 1 } = req.query;
+
+  let { limit = 10 } = req.query;
+  if (limit < 0) limit = 0;
 
   const getByTopic = (queryBuilder) => {
     if (req.params.topic) { queryBuilder.where({ topic: req.params.topic }); }
