@@ -14,13 +14,13 @@ describe('/api', () => {
     .get('/api')
     .expect(200));
 
-  it('405 - returns error 405 for all other requests', () => request(app)
+  it('405 - returns error 405 for other requests', () => request(app)
     .post('/api')
     .expect(405)
     .then(({ body }) => {
       expect(body.message).to.equal('Method Not Allowed');
     }));
-
+  // END /API TESTS
   describe('/topics', () => {
     const pathToTopics = '/api/topics';
 
@@ -60,7 +60,13 @@ describe('/api', () => {
         .send(newTopic)
         .expect(422);
     });
-
+    it('405 - returns error 405 for other requests', () => request(app)
+      .put(pathToTopics)
+      .expect(405)
+      .then(({ body }) => {
+        expect(body.message).to.equal('Method Not Allowed');
+      }));
+    // END /TOPICS TESTS
     describe('/:topic/articles', () => {
       it('200 GET - responds with an array of article objects for a given object with defaulted queries available', () => request(app)
         .get('/api/topics/mitch/articles')
@@ -120,7 +126,14 @@ describe('/api', () => {
           .send(anArticle)
           .expect(404);
       });
+      it('405 - returns error 405 for other requests', () => request(app)
+        .put('/api/topics/cats/articles')
+        .expect(405)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Method Not Allowed');
+        }));
     });
+    // END TOPICS/:ARTICLE_ID/ARTICLES TESTS
   });
 
   describe('/articles', () => {
@@ -140,7 +153,13 @@ describe('/api', () => {
           'topic',
         );
       }));
-
+    it('405 - returns error 405 for other requests', () => request(app)
+      .put('/api/articles')
+      .expect(405)
+      .then(({ body }) => {
+        expect(body.message).to.equal('Method Not Allowed');
+      }));
+    // END /ARTICLES TESTS
     describe('/:article_id', () => {
       it('200 GET - responds with an article object', () => request(app)
         .get('/api/articles/1')
@@ -196,7 +215,13 @@ describe('/api', () => {
           .then(({ body }) => {
             expect(body.articles).to.have.length(11);
           })));
-
+      it('405 - returns error 405 for other requests', () => request(app)
+        .put('/api/articles/1')
+        .expect(405)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Method Not Allowed');
+        }));
+      // END ARTICLES/:ARTICLE_ID TESTS
       describe('/comments', () => {
         it('200 GET - responds with an array of comments for the given article_id', () => request(app)
           .get('/api/articles/1/comments')
@@ -245,7 +270,13 @@ describe('/api', () => {
               expect(body.comments).to.have.length(14);
             });
         });
-
+        it('405 - returns error 405 for other requests', () => request(app)
+          .put('/api/articles/1/comments')
+          .expect(405)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Method Not Allowed');
+          }));
+        // END ARTICLES/:ARTICLE_ID/COMMENTS TESTS
         describe('/:comment_id', () => {
           it('200 PATCH - accepts an object { inc_votes: newVote } and changes comment votes by newVote', () => {
             const aVote = { inc_votes: 4 };
@@ -269,6 +300,13 @@ describe('/api', () => {
               .then(({ body }) => {
                 expect(body.comments).to.have.length(12);
               })));
+          it('405 - returns error 405 for other requests', () => request(app)
+            .put('/api/articles/1/comments/2')
+            .expect(405)
+            .then(({ body }) => {
+              expect(body.message).to.equal('Method Not Allowed');
+            }));
+          // END ARTICLES/:ARTICLE_ID/COMMENTS/:COMMENT_ID TESTS
         });
       });
     });
@@ -286,6 +324,13 @@ describe('/api', () => {
           'name',
         );
       }));
+    it('405 - returns error 405 for other requests', () => request(app)
+      .put('/api/users')
+      .expect(405)
+      .then(({ body }) => {
+        expect(body.message).to.equal('Method Not Allowed');
+      }));
+    // END USERS TESTS
     describe('/:user_id', () => {
       it('200 GET - responds with a user object', () => request(app)
         .get('/api/users/1')
@@ -297,6 +342,13 @@ describe('/api', () => {
           );
           expect(user.username).to.equal('butter_bridge');
         }));
+      it('405 - returns error 405 for other requests', () => request(app)
+        .put('/api/users/1')
+        .expect(405)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Method Not Allowed');
+        }));
     });
+    // END USERS/:USER_ID TESTS
   });
 });

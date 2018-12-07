@@ -3,22 +3,27 @@ const { getArticles, updateVotes, deleteArticle } = require('../controllers/arti
 const {
   getComments, postComment, voteComment, deleteComment,
 } = require('../controllers/commentsController');
+const { handle405 } = require('../middleware/errorHandling');
 
 articlesRouter.route('/')
-  .get(getArticles);
+  .get(getArticles)
+  .all(handle405);
 
 articlesRouter.route('/:article_id')
   .get(getArticles)
   .patch(updateVotes)
-  .delete(deleteArticle);
+  .delete(deleteArticle)
+  .all(handle405);
 
 articlesRouter.route('/:article_id/comments')
   .get(getComments)
-  .post(postComment);
+  .post(postComment)
+  .all(handle405);
 
 articlesRouter.route('/:article_id/comments/:comment_id')
   .patch(voteComment)
-  .delete(deleteComment);
+  .delete(deleteComment)
+  .all(handle405);
 
 
 module.exports = articlesRouter;
