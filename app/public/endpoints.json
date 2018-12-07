@@ -1,0 +1,37 @@
+{
+  "/api": {
+    "GET": "Serves information about available endpoints in JSON format.",
+    "/topics": {
+      "GET": "Gets a list of topics.",
+      "POST": "Posts a topic.",
+      "/:topic": {
+        "/articles": {
+          "GET": "Gets a list of articles by topic.",
+          "POST": "Posts a new article to a topic."
+        }
+      }
+    },
+    "/articles": {
+      "GET": "Gets an array of all article objects.",
+      "/:article_id": {
+        "GET": "Gets an article object by ID.",
+        "PATCH": "Allows user to vote on an article.",
+        "DELETE": "Deletes an article.",
+        "/comments": {
+          "GET": "Gets an array of comment objects for given article.",
+          "POST": "Allows user to send a new comment object.",
+          "/:comment_id": {
+            "PATCH": "Allows user to vote on a comment.",
+            "DELETE": "Deletes a comment object returning an empty array."
+          }
+        }
+      }
+    }
+  },
+  "/users": {
+    "GET": "Gets all users as an array of user objects.",
+    "/:user_id": {
+      "GET": "Gets a user by ID as an array containing the user object."
+    }
+  }
+}
