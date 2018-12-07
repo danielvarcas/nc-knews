@@ -275,5 +275,17 @@ describe('/api', () => {
           'name',
         );
       }));
+    describe('/:user_id', () => {
+      it.only('200 GET - responds with a user object', () => request(app)
+        .get('/api/users/1')
+        .expect(200)
+        .then(({ body }) => {
+          const user = body.users[0];
+          expect(user).to.have.all.keys(
+            'user_id', 'username', 'avatar_url', 'name',
+          );
+          expect(user.username).to.equal('butter_bridge');
+        }));
+    });
   });
 });
