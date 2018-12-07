@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha ./app/spec",
     "lint": "eslint ./",
+    "dev": "nodemon app/listen",
     "pre-commit": "npm t",
     "posttest": "npm run lint",
     "make:test-db": "psql -f ./db/seed/setup_test.sql",
