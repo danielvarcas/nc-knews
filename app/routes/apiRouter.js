@@ -3,7 +3,7 @@ const topicsRouter = require('./topicsRouter');
 const articlesRouter = require('./articlesRouter');
 const usersRouter = require('./usersRouter');
 const { getHome } = require('../controllers/apiController');
-const { handle405 } = require('../middleware/errorHandling');
+const { handle405 } = require('../errors/errorHandling');
 
 apiRouter.route('/')
   .get(getHome)

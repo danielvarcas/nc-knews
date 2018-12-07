@@ -3,7 +3,7 @@ const { getArticles, updateVotes, deleteArticle } = require('../controllers/arti
 const {
   getComments, postComment, voteComment, deleteComment,
 } = require('../controllers/commentsController');
-const { handle405 } = require('../middleware/errorHandling');
+const { handle405 } = require('../errors/errorHandling');
 
 articlesRouter.route('/')
   .get(getArticles)
