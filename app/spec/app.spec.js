@@ -170,6 +170,16 @@ describe('/api', () => {
           expect(body.message).to.equal('Invalid input: column does not exist in database.');
         }));
 
+      it('400 POST - rejects a new post if topic or body are null', () => {
+        const anArticle = {
+          user_id: 1,
+        };
+        return request(app)
+          .post('/api/topics/cats/articles')
+          .send(anArticle)
+          .expect(400);
+      });
+
       it('404 POST - rejects a new post if topic does not exist', () => {
         const anArticle = {
           title: 'The first rule of Fight Club...',
