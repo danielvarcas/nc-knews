@@ -65,7 +65,6 @@ describe('/api', () => {
         });
     });
 
-    // This test captures same errors at other endpoints
     it('400 POST - rejects objects with extra properties', () => {
       const badTopic = {
         description: 'meow',
@@ -124,6 +123,15 @@ describe('/api', () => {
           expect(body.articles).to.have.length(0);
         }));
 
+      it('200 GET - paginates results', () => {
+        request(app)
+          .get('/api/topics/mitch/articles?p=2')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles[0].article_id).to.equal(2);
+          });
+      });
+
       it('200 GET - returns an empty array if no articles found (including if topic does not exist)', () => request(app)
         .get('/api/topics/existential_crises/articles')
         .expect(200)
@@ -154,6 +162,13 @@ describe('/api', () => {
             expect(article.body).to.equal('How are you?');
           });
       });
+
+      it('400 GET - returns error 400 if user attemps to sort by a column that does not exist', () => request(app)
+        .get('/api/topics/mitch/articles?sort_by=123')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Invalid input: column does not exist in database.');
+        }));
 
       it('404 POST - rejects a new post if topic does not exist', () => {
         const anArticle = {
