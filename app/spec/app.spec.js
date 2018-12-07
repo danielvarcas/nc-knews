@@ -77,7 +77,7 @@ describe('/api', () => {
         .send(badTopic)
         .expect(400)
         .then(({ body }) => {
-          expect(body.message).to.equal('Invalid input: one or more keys of sent object do not exist as columns in database.');
+          expect(body.message).to.equal('Invalid input: column does not exist in database.');
         });
     });
 
