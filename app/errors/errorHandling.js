@@ -1,6 +1,7 @@
 exports.handle400 = (err, req, res, next) => {
   const codes = {
-    42703: 'Invalid input. One or more keys of sent object do not exist as columns in database.',
+    23502: 'Invalid input: one or more required keys missing.',
+    42703: 'Invalid input: one or more keys of sent object do not exist as columns in database.',
   };
   if (codes[err.code]) res.status(400).send({ message: codes[err.code] });
   else next(err);
