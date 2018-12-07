@@ -170,7 +170,7 @@ describe('/api', () => {
           expect(body.message).to.equal('Invalid input: column does not exist in database.');
         }));
 
-      it('400 POST - rejects a new post if topic or body are null', () => {
+      it('400 POST - rejects a new post if title or body are null', () => {
         const anArticle = {
           user_id: 1,
         };
