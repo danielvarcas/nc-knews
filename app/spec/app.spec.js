@@ -14,6 +14,13 @@ describe('/api', () => {
     .get('/api')
     .expect(200));
 
+  it('405 - returns error 405 for all other requests', () => request(app)
+    .post('/api')
+    .expect(405)
+    .then(({ body }) => {
+      expect(body.message).to.equal('Method Not Allowed');
+    }));
+
   describe('/topics', () => {
     const pathToTopics = '/api/topics';
 
