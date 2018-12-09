@@ -9,5 +9,6 @@ exports.getUsers = (req, res, next) => {
 
   return connection('users')
     .modify(getById)
-    .then(users => res.status(200).send({ users }));
+    .then(users => res.status(200).send({ users }))
+    .catch(next);
 };

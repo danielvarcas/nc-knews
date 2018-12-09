@@ -79,4 +79,5 @@ exports.deleteArticle = (req, res, next) => connection('comments')
     .del())
   .then(() => {
     res.status(200).send({ article: [] });
-  });
+  })
+  .catch(next);
