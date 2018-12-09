@@ -42,14 +42,18 @@ exports.postComment = (req, res, next) => connection('comments').insert({
   })
   .catch(next);
 
-exports.voteComment = (req, res, next) => connection('comments')
-  .where('comment_id', req.params.comment_id)
-  .increment('votes', req.body.inc_votes)
-  .returning('*')
-  .then(([comment]) => {
-    res.status(200).send({ comment });
-  })
-  .catch(next);
+exports.voteComment = (req, res, next) => {
+  const vote = req.body.inc_votes;
+  if (Number.isNaN(Number(vote))) { res.status(400).send({ message: 'Error 400 - vote must be a number' }); }
+  return connection('comments')
+    .where('comment_id', req.params.comment_id)
+    .increment('votes', req.body.inc_votes)
+    .returning('*')
+    .then(([comment]) => {
+      res.status(200).send({ comment });
+    })
+    .catch(next);
+};
 
 exports.deleteComment = (req, res, next) => connection('comments')
   .where('comments.article_id', req.params.article_id)

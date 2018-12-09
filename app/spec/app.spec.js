@@ -386,6 +386,17 @@ describe('/api', () => {
               });
           });
 
+          it('400 PATCH - responds with 404 if given an invalid inc_votes', () => {
+            const badVote = { inc_votes: 'hello' };
+            return request
+              .patch('/api/articles/1/comments/1')
+              .send(badVote)
+              .expect(400)
+              .then(({ body }) => {
+                expect(body.message).to.equal('Error 400 - vote must be a number');
+              });
+          });
+
           it('204 DELETE - deletes comment by comment_id and returns an empty object', () => request
             .delete('/api/articles/1/comments/2')
             .expect(204)
@@ -398,12 +409,16 @@ describe('/api', () => {
                 expect(body.comments).to.have.length(12);
               })));
 
-          it('404 DELETE - returns error 404 if comment does not exist', () => request
-            .delete('/api/articles/1/comments/99999')
-            .expect(404)
-            .then(({ body }) => {
-              expect(body.message).to.equal('Error 404 - comment does not exist');
-            }));
+          it('404 DELETE - returns error 404 if comment does not exist', () => {
+            const aVote = { inc_votes: 4 };
+            return request
+              .delete('/api/articles/1/comments/99999')
+              .send(aVote)
+              .expect(404)
+              .then(({ body }) => {
+                expect(body.message).to.equal('Error 404 - comment does not exist');
+              });
+          });
 
           it('405 - returns error 405 for other requests', () => request
             .put('/api/articles/1/comments/2')
