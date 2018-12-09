@@ -1,7 +1,10 @@
 process.env.NODE_ENV = 'test';
 const { expect } = require('chai');
-const request = require('supertest');
+const supertest = require('supertest');
 const app = require('../app');
+
+const request = supertest(app);
+
 const connection = require('../../db/connection');
 
 describe('/api', () => {
@@ -10,11 +13,11 @@ describe('/api', () => {
     .then(() => connection.migrate.latest())
     .then(() => connection.seed.run()));
 
-  it('serves JSON describing all available endpoints', () => request(app)
+  it('serves JSON describing all available endpoints', () => request
     .get('/api')
     .expect(200));
 
-  it('405 - returns error 405 for other requests', () => request(app)
+  it('405 - returns error 405 for other requests', () => request
     .post('/api')
     .expect(405)
     .then(({ body }) => {
@@ -25,7 +28,7 @@ describe('/api', () => {
   describe('/topics', () => {
     const pathToTopics = '/api/topics';
 
-    it('200 GET: responds with an array of topic objects', () => request(app)
+    it('200 GET: responds with an array of topic objects', () => request
       .get(pathToTopics)
       .expect(200)
       .then(({ body }) => {
@@ -38,14 +41,14 @@ describe('/api', () => {
         description: 'A Coding Education Like No Other',
         slug: 'northcoders',
       };
-      return request(app)
+      return request
         .post(pathToTopics)
         .send(newTopic)
         .expect(201)
         .then(({ body }) => {
           expect(body.newTopic[0]).to.have.all.keys('description', 'slug');
         })
-        .then(() => request(app)
+        .then(() => request
           .get(pathToTopics))
         .then(({ body }) => {
           expect(body.topics).to.have.length(3);
@@ -56,7 +59,7 @@ describe('/api', () => {
       const newTopic = {
         description: 'A Coding Education Like No Other',
       };
-      return request(app)
+      return request
         .post(pathToTopics)
         .send(newTopic)
         .expect(400)
@@ -71,7 +74,7 @@ describe('/api', () => {
         slug: 'cats',
         bad: 'hi',
       };
-      return request(app)
+      return request
         .post(pathToTopics)
         .send(badTopic)
         .expect(400)
@@ -85,13 +88,13 @@ describe('/api', () => {
         description: 'meow',
         slug: 'cats',
       };
-      return request(app)
+      return request
         .post(pathToTopics)
         .send(newTopic)
         .expect(422);
     });
 
-    it('405 - returns error 405 for other requests', () => request(app)
+    it('405 - returns error 405 for other requests', () => request
       .put(pathToTopics)
       .expect(405)
       .then(({ body }) => {
@@ -100,7 +103,7 @@ describe('/api', () => {
     // END /TOPICS TESTS
 
     describe('/:topic/articles', () => {
-      it('200 GET - responds with an array of article objects for a given object with defaulted queries available', () => request(app)
+      it('200 GET - responds with an array of article objects for a given object with defaulted queries available', () => request
         .get('/api/topics/mitch/articles')
         .expect(200)
         .then(({ body }) => {
@@ -116,7 +119,7 @@ describe('/api', () => {
           expect(body.articles).to.have.length(10);
         }));
 
-      it('200 GET - ensures limit is not negative (sets to a minimum of 0)', () => request(app)
+      it('200 GET - ensures limit is not negative (sets to a minimum of 0)', () => request
         .get('/api/topics/mitch/articles?limit=-1')
         .expect(200)
         .then(({ body }) => {
@@ -124,7 +127,7 @@ describe('/api', () => {
         }));
 
       it('200 GET - paginates results', () => {
-        request(app)
+        request
           .get('/api/topics/mitch/articles?p=2')
           .expect(200)
           .then(({ body }) => {
@@ -132,7 +135,7 @@ describe('/api', () => {
           });
       });
 
-      it('200 GET - returns an empty array if no articles found (including if topic does not exist)', () => request(app)
+      it('200 GET - returns an empty array if no articles found (including if topic does not exist)', () => request
         .get('/api/topics/existential_crises/articles')
         .expect(200)
         .then(({ body }) => expect(body.articles).to.eql([])));
@@ -143,7 +146,7 @@ describe('/api', () => {
           body: 'How are you?',
           user_id: 1,
         };
-        return request(app)
+        return request
           .post('/api/topics/cats/articles')
           .send(anArticle)
           .expect(201)
@@ -163,7 +166,7 @@ describe('/api', () => {
           });
       });
 
-      it('400 GET - returns error 400 if user attemps to sort by a column that does not exist', () => request(app)
+      it('400 GET - returns error 400 if user attemps to sort by a column that does not exist', () => request
         .get('/api/topics/mitch/articles?sort_by=123')
         .expect(400)
         .then(({ body }) => {
@@ -174,7 +177,7 @@ describe('/api', () => {
         const anArticle = {
           user_id: 1,
         };
-        return request(app)
+        return request
           .post('/api/topics/cats/articles')
           .send(anArticle)
           .expect(400);
@@ -186,7 +189,7 @@ describe('/api', () => {
           body: 'You do not talk about Fight Club.',
           user_id: 1,
         };
-        return request(app)
+        return request
           .post('/api/topics/fightclub/articles')
           .send(anArticle)
           .expect(404)
@@ -194,7 +197,7 @@ describe('/api', () => {
             expect(body.message).to.equal('Key is not present in table.');
           });
       });
-      it('405 - returns error 405 for other requests', () => request(app)
+      it('405 - returns error 405 for other requests', () => request
         .put('/api/topics/cats/articles')
         .expect(405)
         .then(({ body }) => {
@@ -205,7 +208,7 @@ describe('/api', () => {
   });
 
   describe('/articles', () => {
-    it('200 GET - responds with an array of article objects with defaulted queries', () => request(app)
+    it('200 GET - responds with an array of article objects with defaulted queries', () => request
       .get('/api/articles')
       .expect(200)
       .then(({ body }) => {
@@ -221,7 +224,7 @@ describe('/api', () => {
           'topic',
         );
       }));
-    it('405 - returns error 405 for other requests', () => request(app)
+    it('405 - returns error 405 for other requests', () => request
       .put('/api/articles')
       .expect(405)
       .then(({ body }) => {
@@ -229,7 +232,7 @@ describe('/api', () => {
       }));
     // END /ARTICLES TESTS
     describe('/:article_id', () => {
-      it('200 GET - responds with an article object', () => request(app)
+      it('200 GET - responds with an article object', () => request
         .get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
@@ -249,7 +252,7 @@ describe('/api', () => {
           expect(article.votes).to.equal(100);
         }));
 
-      it('200 GET - responds with an empty array if article_id does not exist in database', () => request(app)
+      it('200 GET - responds with an empty array if article_id does not exist in database', () => request
         .get('/api/articles/9999')
         .expect(200)
         .then(({ body }) => {
@@ -258,7 +261,7 @@ describe('/api', () => {
 
       it('200 PATCH - accepts an object which changes article\'s votes by newVote, then returns the updated article', () => {
         const aVote = { inc_votes: 10 };
-        return request(app)
+        return request
           .patch('/api/articles/1')
           .send(aVote)
           .expect(200)
@@ -268,22 +271,22 @@ describe('/api', () => {
           });
       });
 
-      it('404 PATCH - returns error 404 if article does not exist', () => request(app)
+      it('404 PATCH - returns error 404 if article does not exist', () => request
         .patch('/api/articles/9999')
         .expect(404));
 
-      it('200 DELETE - deletes an article by article_id and responds with an empty object', () => request(app)
+      it('200 DELETE - deletes an article by article_id and responds with an empty object', () => request
         .delete('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
           expect(body.article).to.eql([]);
         })
-        .then(() => request(app)
+        .then(() => request
           .get('/api/articles?limit=100')
           .then(({ body }) => {
             expect(body.articles).to.have.length(11);
           })));
-      it('405 - returns error 405 for other requests', () => request(app)
+      it('405 - returns error 405 for other requests', () => request
         .put('/api/articles/1')
         .expect(405)
         .then(({ body }) => {
@@ -291,7 +294,7 @@ describe('/api', () => {
         }));
       // END ARTICLES/:ARTICLE_ID TESTS
       describe('/comments', () => {
-        it('200 GET - responds with an array of comments for the given article_id', () => request(app)
+        it('200 GET - responds with an array of comments for the given article_id', () => request
           .get('/api/articles/1/comments')
           .expect(200)
           .then(({ body }) => {
@@ -318,7 +321,7 @@ describe('/api', () => {
             user_id: 1,
             body: 'Yayyyyyyyy :D',
           };
-          return request(app)
+          return request
             .post('/api/articles/1/comments')
             .send(newComment)
             .expect(201)
@@ -332,13 +335,13 @@ describe('/api', () => {
                 'body',
               );
             })
-            .then(() => request(app)
+            .then(() => request
               .get('/api/articles/1/comments?limit=100'))
             .then(({ body }) => {
               expect(body.comments).to.have.length(14);
             });
         });
-        it('405 - returns error 405 for other requests', () => request(app)
+        it('405 - returns error 405 for other requests', () => request
           .put('/api/articles/1/comments')
           .expect(405)
           .then(({ body }) => {
@@ -348,7 +351,7 @@ describe('/api', () => {
         describe('/:comment_id', () => {
           it('200 PATCH - accepts an object { inc_votes: newVote } and changes comment votes by newVote', () => {
             const aVote = { inc_votes: 4 };
-            return request(app)
+            return request
               .patch('/api/articles/1/comments/1')
               .send(aVote)
               .expect(200)
@@ -357,18 +360,18 @@ describe('/api', () => {
               });
           });
 
-          it('200 DELETE - deletes comment by comment_id and returns an empty object', () => request(app)
+          it('200 DELETE - deletes comment by comment_id and returns an empty object', () => request
             .delete('/api/articles/1/comments/2')
             .expect(200)
             .then(({ body }) => {
               expect(body.comment).to.eql({});
             })
-            .then(() => request(app)
+            .then(() => request
               .get('/api/articles/1/comments?limit=100')
               .then(({ body }) => {
                 expect(body.comments).to.have.length(12);
               })));
-          it('405 - returns error 405 for other requests', () => request(app)
+          it('405 - returns error 405 for other requests', () => request
             .put('/api/articles/1/comments/2')
             .expect(405)
             .then(({ body }) => {
@@ -380,7 +383,7 @@ describe('/api', () => {
     });
   });
   describe('/users', () => {
-    it('200 GET - responds with an array of user objects', () => request(app)
+    it('200 GET - responds with an array of user objects', () => request
       .get('/api/users')
       .expect(200)
       .then(({ body }) => {
@@ -392,7 +395,7 @@ describe('/api', () => {
           'name',
         );
       }));
-    it('405 - returns error 405 for other requests', () => request(app)
+    it('405 - returns error 405 for other requests', () => request
       .put('/api/users')
       .expect(405)
       .then(({ body }) => {
@@ -400,7 +403,7 @@ describe('/api', () => {
       }));
     // END USERS TESTS
     describe('/:user_id', () => {
-      it('200 GET - responds with a user object', () => request(app)
+      it('200 GET - responds with a user object', () => request
         .get('/api/users/1')
         .expect(200)
         .then(({ body }) => {
@@ -410,7 +413,7 @@ describe('/api', () => {
           );
           expect(user.username).to.equal('butter_bridge');
         }));
-      it('405 - returns error 405 for other requests', () => request(app)
+      it('405 - returns error 405 for other requests', () => request
         .put('/api/users/1')
         .expect(405)
         .then(({ body }) => {

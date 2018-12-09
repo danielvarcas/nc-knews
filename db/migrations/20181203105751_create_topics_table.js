@@ -1,8 +1,8 @@
 
 exports.up = function (knex, Promise) {
   return knex.schema.createTable('topics', (table) => {
-    table.string('slug').primary();
-    table.string('description');
+    table.string('slug').unique().primary();
+    table.string('description').notNullable();
   });
 };
 
