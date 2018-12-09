@@ -272,7 +272,10 @@ describe('/api', () => {
 
       it('404 PATCH - returns error 404 if article does not exist', () => request
         .patch('/api/articles/9999')
-        .expect(404));
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Error 404 - Article does not exist');
+        }));
 
       it('204 DELETE - deletes an article by article_id and responds with an empty object', () => request
         .delete('/api/articles/1')

@@ -62,12 +62,10 @@ exports.voteArticle = (req, res, next) => connection('articles')
   .increment('votes', req.body.inc_votes)
   .returning('*')
   .then(([article]) => {
-    if (!article) {
-      res.status(404).send({
-        err: '404 - Page Not Found.',
-        message: 'Did not find any articles matching that article ID',
-      });
-    } else res.status(200).send({ article });
+    if (article) res.status(200).send({ article });
+    else {
+      res.status(404).send({ message: 'Error 404 - Article does not exist' });
+    }
   })
   .catch(next);
 
