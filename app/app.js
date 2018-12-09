@@ -1,4 +1,3 @@
-process.env.NODE_ENV = 'test';
 const express = require('express');
 const bodyParser = require('body-parser');
 const apiRouter = require('./routes/apiRouter');
