@@ -56,5 +56,5 @@ exports.deleteComment = (req, res, next) => connection('comments')
   .andWhere('comments.comment_id', req.params.comment_id)
   .del()
   .then(() => {
-    res.status(200).send({ comment: {} });
+    res.status(204).send({});
   });

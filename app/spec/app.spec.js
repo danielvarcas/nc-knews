@@ -274,17 +274,18 @@ describe('/api', () => {
         .patch('/api/articles/9999')
         .expect(404));
 
-      it('200 DELETE - deletes an article by article_id and responds with an empty object', () => request
+      it('204 DELETE - deletes an article by article_id and responds with an empty object', () => request
         .delete('/api/articles/1')
-        .expect(200)
+        .expect(204)
         .then(({ body }) => {
-          expect(body.article).to.eql([]);
+          expect(body).to.eql({});
         })
         .then(() => request
           .get('/api/articles?limit=100')
           .then(({ body }) => {
             expect(body.articles).to.have.length(11);
           })));
+
       it('405 - returns error 405 for other requests', () => request
         .put('/api/articles/1')
         .expect(405)
@@ -360,11 +361,11 @@ describe('/api', () => {
               });
           });
 
-          it('200 DELETE - deletes comment by comment_id and returns an empty object', () => request
+          it('204 DELETE - deletes comment by comment_id and returns an empty object', () => request
             .delete('/api/articles/1/comments/2')
-            .expect(200)
+            .expect(204)
             .then(({ body }) => {
-              expect(body.comment).to.eql({});
+              expect(body).to.eql({});
             })
             .then(() => request
               .get('/api/articles/1/comments?limit=100')

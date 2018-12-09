@@ -78,6 +78,6 @@ exports.deleteArticle = (req, res, next) => connection('comments')
     .where('articles.article_id', req.params.article_id)
     .del())
   .then(() => {
-    res.status(200).send({ article: [] });
+    res.status(204).send({});
   })
   .catch(next);
