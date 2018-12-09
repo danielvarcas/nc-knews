@@ -5,5 +5,7 @@ exports.getTopics = (req, res, next) => connection('topics')
   .catch(next);
 
 exports.postTopic = (req, res, next) => connection('topics').insert(req.body).returning('*')
-  .then(newTopic => res.status(201).send({ newTopic }))
+  .then(([topic]) => {
+    res.status(201).send({ topic });
+  })
   .catch(next);

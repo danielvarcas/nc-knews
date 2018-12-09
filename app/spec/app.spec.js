@@ -46,7 +46,7 @@ describe('/api', () => {
         .send(newTopic)
         .expect(201)
         .then(({ body }) => {
-          expect(body.newTopic[0]).to.have.all.keys('description', 'slug');
+          expect(body.topic).to.have.all.keys('description', 'slug');
         })
         .then(() => request
           .get(pathToTopics))
@@ -212,6 +212,7 @@ describe('/api', () => {
       .get('/api/articles')
       .expect(200)
       .then(({ body }) => {
+        // console.log(body);
         const { articles } = body;
         expect(articles).to.have.length(10);
         expect(articles[0]).to.have.all.keys(
@@ -236,8 +237,7 @@ describe('/api', () => {
         .get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
-          expect(body.articles).to.have.length(1);
-          const article = body.articles[0];
+          const { article } = body;
           expect(article).to.have.all.keys(
             'article_id',
             'author',
