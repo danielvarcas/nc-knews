@@ -397,6 +397,17 @@ describe('/api', () => {
               });
           });
 
+          it('404 PATCH - returns error 404 if comment does not exist', () => {
+            const aVote = { inc_votes: 1 };
+            return request
+              .patch('/api/articles/1/comments/9999')
+              .send(aVote)
+              .expect(404)
+              .then(({ body }) => {
+                expect(body.message).to.equal('Error 404 - comment does not exist');
+              });
+          });
+
           it('204 DELETE - deletes comment by comment_id and returns an empty object', () => request
             .delete('/api/articles/1/comments/2')
             .expect(204)

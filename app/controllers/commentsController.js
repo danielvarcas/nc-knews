@@ -50,7 +50,8 @@ exports.voteComment = (req, res, next) => {
     .increment('votes', req.body.inc_votes)
     .returning('*')
     .then(([comment]) => {
-      res.status(200).send({ comment });
+      if (!comment) res.status(404).send({ message: 'Error 404 - comment does not exist' });
+      else res.status(200).send({ comment });
     })
     .catch(next);
 };
