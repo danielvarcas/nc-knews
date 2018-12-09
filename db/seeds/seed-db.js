@@ -8,7 +8,7 @@ exports.seed = function (knex, Promise) {
   const deleteTablesPromises = ['topics', 'users', 'articles', 'comments'].map(tableName => knex(tableName).del());
   return Promise.all(deleteTablesPromises)
     .then(() => knex('topics').insert(topicData).returning('*'))
-    .then(([topics]) => {
+    .then((topics) => {
       const userPromise = knex('users').insert(userData).returning('*');
       return Promise.all([topics, userPromise]);
     })
