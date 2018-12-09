@@ -24,3 +24,7 @@ exports.handle422 = (err, req, res, next) => {
   if (codes[err.code]) res.status(422).send({ message: codes[err.code] });
   else next(err);
 };
+
+exports.handle500 = (err, req, res, next) => {
+  res.status(500).send(err);
+};
