@@ -75,7 +75,11 @@ exports.deleteArticle = (req, res, next) => connection('comments')
   .then(() => connection('articles')
     .where('articles.article_id', req.params.article_id)
     .del())
-  .then(() => {
-    res.status(204).send({});
+  .then((deletions) => {
+    if (deletions < 1) {
+      res.status(404).send({ message: 'Error 404 - article does not exist' });
+    } else {
+      res.status(204).send({});
+    }
   })
   .catch(next);

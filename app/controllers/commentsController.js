@@ -55,6 +55,10 @@ exports.deleteComment = (req, res, next) => connection('comments')
   .where('comments.article_id', req.params.article_id)
   .andWhere('comments.comment_id', req.params.comment_id)
   .del()
-  .then(() => {
-    res.status(204).send({});
+  .then((deletions) => {
+    if (deletions < 1) {
+      res.status(404).send({ message: 'Error 404 - comment does not exist' });
+    } else {
+      res.status(204).send({});
+    }
   });

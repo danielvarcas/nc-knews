@@ -289,6 +289,13 @@ describe('/api', () => {
             expect(body.articles).to.have.length(11);
           })));
 
+      it('404 DELETE - returns error 404 if article does not exist', () => request
+        .delete('/api/articles/99999')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Error 404 - article does not exist');
+        }));
+
       it('405 - returns error 405 for other requests', () => request
         .put('/api/articles/1')
         .expect(405)
@@ -375,6 +382,14 @@ describe('/api', () => {
               .then(({ body }) => {
                 expect(body.comments).to.have.length(12);
               })));
+
+          it('404 DELETE - returns error 404 if comment does not exist', () => request
+            .delete('/api/articles/1/comments/99999')
+            .expect(404)
+            .then(({ body }) => {
+              expect(body.message).to.equal('Error 404 - comment does not exist');
+            }));
+
           it('405 - returns error 405 for other requests', () => request
             .put('/api/articles/1/comments/2')
             .expect(405)
