@@ -326,7 +326,9 @@ describe('/api', () => {
             .send(newComment)
             .expect(201)
             .then(({ body }) => {
-              expect(body.comment[0]).to.have.all.keys(
+              // console.log(body);
+              const { comment } = body;
+              expect(comment).to.have.all.keys(
                 'article_id',
                 'comment_id',
                 'votes',

@@ -37,7 +37,7 @@ exports.postComment = (req, res, next) => connection('comments').insert({
   article_id: req.params.article_id,
 })
   .returning('*')
-  .then((comment) => {
+  .then(([comment]) => {
     res.status(201).send({ comment });
   })
   .catch(next);
