@@ -83,6 +83,13 @@ describe('/api', () => {
         });
     });
 
+    it('405 - returns error 405 for other requests', () => request
+      .put(pathToTopics)
+      .expect(405)
+      .then(({ body }) => {
+        expect(body.message).to.equal('Method Not Allowed');
+      }));
+
     it('422 POST - rejects objects where slug (pkey) already exists in database', () => {
       const newTopic = {
         description: 'meow',
@@ -93,13 +100,6 @@ describe('/api', () => {
         .send(newTopic)
         .expect(422);
     });
-
-    it('405 - returns error 405 for other requests', () => request
-      .put(pathToTopics)
-      .expect(405)
-      .then(({ body }) => {
-        expect(body.message).to.equal('Method Not Allowed');
-      }));
     // END /TOPICS TESTS
 
     describe('/:topic/articles', () => {
@@ -270,12 +270,27 @@ describe('/api', () => {
           });
       });
 
-      it('404 PATCH - returns error 404 if article does not exist', () => request
-        .patch('/api/articles/9999')
-        .expect(404)
-        .then(({ body }) => {
-          expect(body.message).to.equal('Error 404 - Article does not exist');
-        }));
+      it('400 PATCH - responds with 404 if given an invalid inc_votes', () => {
+        const badVote = { inc_votes: 'hello' };
+        return request
+          .patch('/api/articles/1')
+          .send(badVote)
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Error 400 - vote must be a number');
+          });
+      });
+
+      it('404 PATCH - returns error 404 if article does not exist', () => {
+        const aVote = { inc_votes: 1 };
+        return request
+          .patch('/api/articles/9999')
+          .send(aVote)
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.message).to.equal('Error 404 - Article does not exist');
+          });
+      });
 
       it('204 DELETE - deletes an article by article_id and responds with an empty object', () => request
         .delete('/api/articles/1')

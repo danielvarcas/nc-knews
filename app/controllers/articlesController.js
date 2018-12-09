@@ -57,17 +57,19 @@ exports.postArticle = (req, res, next) => {
     .catch(next);
 };
 
-exports.voteArticle = (req, res, next) => connection('articles')
-  .where('articles.article_id', req.params.article_id)
-  .increment('votes', req.body.inc_votes)
-  .returning('*')
-  .then(([article]) => {
-    if (article) res.status(200).send({ article });
-    else {
-      res.status(404).send({ message: 'Error 404 - Article does not exist' });
-    }
-  })
-  .catch(next);
+exports.voteArticle = (req, res, next) => {
+  const vote = req.body.inc_votes;
+  if (Number.isNaN(Number(vote))) { res.status(400).send({ message: 'Error 400 - vote must be a number' }); }
+  return connection('articles')
+    .where('articles.article_id', req.params.article_id)
+    .increment('votes', req.body.inc_votes)
+    .returning('*')
+    .then(([article]) => {
+      if (!article) res.status(404).send({ message: 'Error 404 - Article does not exist' });
+      else res.status(200).send({ article });
+    })
+    .catch(next);
+};
 
 exports.deleteArticle = (req, res, next) => connection('comments')
   .where('comments.article_id', req.params.article_id)
