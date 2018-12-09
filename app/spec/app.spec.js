@@ -270,6 +270,13 @@ describe('/api', () => {
           });
       });
 
+      it('200 PATCH - returns an unmodified article if no body sent', () => request
+        .patch('/api/articles/1')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article.votes).to.equal(100);
+        }));
+
       it('400 PATCH - responds with 404 if given an invalid inc_votes', () => {
         const badVote = { inc_votes: 'hello' };
         return request
@@ -385,6 +392,13 @@ describe('/api', () => {
                 expect(body.comment.votes).to.equal(20);
               });
           });
+
+          it('200 PATCH - returns an unmodified comment if no body sent', () => request
+            .patch('/api/articles/1/comments/1')
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.comment.votes).to.equal(16);
+            }));
 
           it('400 PATCH - responds with 404 if given an invalid inc_votes', () => {
             const badVote = { inc_votes: 'hello' };

@@ -58,11 +58,11 @@ exports.postArticle = (req, res, next) => {
 };
 
 exports.voteArticle = (req, res, next) => {
-  const vote = req.body.inc_votes;
+  const vote = req.body.inc_votes || 0;
   if (Number.isNaN(Number(vote))) { res.status(400).send({ message: 'Error 400 - vote must be a number' }); }
   return connection('articles')
     .where('articles.article_id', req.params.article_id)
-    .increment('votes', req.body.inc_votes)
+    .increment('votes', vote)
     .returning('*')
     .then(([article]) => {
       if (!article) res.status(404).send({ message: 'Error 404 - Article does not exist' });
