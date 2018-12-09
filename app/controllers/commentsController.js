@@ -46,7 +46,7 @@ exports.voteComment = (req, res, next) => connection('comments')
   .where('comment_id', req.params.comment_id)
   .increment('votes', req.body.inc_votes)
   .returning('*')
-  .then((comment) => {
+  .then(([comment]) => {
     res.status(200).send({ comment });
   })
   .catch(next);

@@ -358,7 +358,7 @@ describe('/api', () => {
               .send(aVote)
               .expect(200)
               .then(({ body }) => {
-                expect(body.comment[0].votes).to.equal(20);
+                expect(body.comment.votes).to.equal(20);
               });
           });
 
