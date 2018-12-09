@@ -57,15 +57,15 @@ exports.postArticle = (req, res, next) => {
     .catch(next);
 };
 
-exports.updateVotes = (req, res, next) => connection('articles')
+exports.voteArticle = (req, res, next) => connection('articles')
   .where('articles.article_id', req.params.article_id)
   .increment('votes', req.body.inc_votes)
   .returning('*')
-  .then((article) => {
-    if (!article.length) {
+  .then(([article]) => {
+    if (!article) {
       res.status(404).send({
         err: '404 - Page Not Found.',
-        msg: 'Did not find any articles matching that article ID',
+        message: 'Did not find any articles matching that article ID',
       });
     } else res.status(200).send({ article });
   })

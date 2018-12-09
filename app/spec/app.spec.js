@@ -212,7 +212,6 @@ describe('/api', () => {
       .get('/api/articles')
       .expect(200)
       .then(({ body }) => {
-        // console.log(body);
         const { articles } = body;
         expect(articles).to.have.length(10);
         expect(articles[0]).to.have.all.keys(
@@ -266,7 +265,7 @@ describe('/api', () => {
           .send(aVote)
           .expect(200)
           .then(({ body }) => {
-            const article = body.article[0];
+            const { article } = body;
             expect(article.votes).to.equal(110);
           });
       });
@@ -326,7 +325,6 @@ describe('/api', () => {
             .send(newComment)
             .expect(201)
             .then(({ body }) => {
-              // console.log(body);
               const { comment } = body;
               expect(comment).to.have.all.keys(
                 'article_id',
