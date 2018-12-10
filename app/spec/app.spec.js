@@ -374,6 +374,26 @@ describe('/api', () => {
               expect(body.comments).to.have.length(14);
             });
         });
+
+        it('422 POST - responds with 422 when given a non-existent user ID', () => {
+          const badComment = {
+            user_id: 99999,
+            comment: 'this comment shouldn\'t be posted',
+          };
+          return request
+            .post('/api/articles/1/comments')
+            .send(badComment)
+            .expect(422)
+            .then(({ body }) => {
+              expect(body.message).to.equal('Error 422 - user ID does not exist');
+            })
+            .then(() => request
+              .get('/api/articles/1/comments?limit=100')
+              .then(({ body }) => {
+                expect(body.comments).to.have.length(13);
+              }));
+        });
+
         it('405 - returns error 405 for other requests', () => request
           .put('/api/articles/1/comments')
           .expect(405)
