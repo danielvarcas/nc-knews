@@ -12,7 +12,10 @@
     "make:test-db": "psql -f ./db/seed/setup_test.sql",
     "migrate:latest-test": "npx knex migrate:latest --env test",
     "migrate:rollback-test": "npx knex migrate:rollback --env test",
+    "migrate:latest-dev": "npx knex migrate:latest --env development",
+    "migrate:rollback-dev": "npx knex migrate:rollback --env development",
     "seed:test": "npm run migrate:rollback-test && npm run migrate:latest-test && NODE_ENV=test knex seed:run --env test",
+    "seed:dev": "npm run migrate:rollback-dev && npm run migrate:latest-dev && NODE_ENV=development knex seed:run --env development",
     "lint-fix": "eslint --fix ./",
     "seed:prod": "DB_URL=$(heroku config:get DATABASE_URL) knex seed:run --env production",
     "migrate:latest:prod": "DATABASE_URL=$(heroku config:get DATABASE_URL) knex migrate:latest --env production",
@@ -33,6 +36,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "knex": "^0.15.2",
     "mocha": "^5.2.0",

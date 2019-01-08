@@ -507,6 +507,12 @@ describe('/api', () => {
           );
           expect(user.username).to.equal('butter_bridge');
         }));
+      it('400 GET - responds with 400 if given a malformed user ID', () => request
+        .get('/api/users/hello')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.message).to.equal('Error 400 - malformed user ID, should be an integer.');
+        }));
       it('405 - returns error 405 for other requests', () => request
         .put('/api/users/1')
         .expect(405)
