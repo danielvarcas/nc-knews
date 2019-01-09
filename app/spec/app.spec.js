@@ -501,7 +501,7 @@ describe('/api', () => {
         .get('/api/users/butter_bridge')
         .expect(200)
         .then(({ body }) => {
-          const user = body.user[0];
+          const user = body;
           expect(user).to.have.all.keys(
             'user_id', 'username', 'avatar_url', 'name',
           );

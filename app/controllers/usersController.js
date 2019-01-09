@@ -6,5 +6,8 @@ exports.getUsers = (req, res, next) => connection('users')
 
 exports.getUserByUsername = (req, res, next) => connection('users')
   .where('username', req.params.username)
-  .then(user => res.status(200).send({ user }))
+  .then((users) => {
+    const user = users[0];
+    res.status(200).send(user);
+  })
   .catch(next);
