@@ -131,7 +131,7 @@ describe('/api', () => {
           .get('/api/topics/mitch/articles?p=2')
           .expect(200)
           .then(({ body }) => {
-            expect(body.articles[0].article_id).to.equal(2);
+            expect(body.articles[0].article_id).to.equal(12);
           });
       });
 
@@ -236,7 +236,7 @@ describe('/api', () => {
         .get('/api/articles/1')
         .expect(200)
         .then(({ body }) => {
-          const { article } = body;
+          const article = body;
           expect(article).to.have.all.keys(
             'article_id',
             'author',
@@ -245,17 +245,18 @@ describe('/api', () => {
             'body',
             'comment_count',
             'created_at',
+            'user_id',
             'topic',
           );
           expect(article.author).to.equal('butter_bridge');
           expect(article.votes).to.equal(100);
         }));
 
-      it('200 GET - responds with an empty array if article_id does not exist in database', () => request
+      it('200 GET - responds with an empty object if article_id does not exist in database', () => request
         .get('/api/articles/9999')
         .expect(200)
         .then(({ body }) => {
-          expect(body.articles).to.eql([]);
+          expect(body).to.eql({});
         }));
 
       it('200 PATCH - accepts an object which changes article\'s votes by newVote, then returns the updated article', () => {
