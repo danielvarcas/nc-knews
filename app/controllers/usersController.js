@@ -2,8 +2,8 @@ const connection = require('../../db/connection');
 
 exports.getUsers = (req, res, next) => {
   const getById = (queryBuilder) => {
-    if (req.params.user_id) {
-      queryBuilder.where('user_id', req.params.user_id);
+    if (req.params.username) {
+      queryBuilder.where('username', req.params.username);
     }
   };
 

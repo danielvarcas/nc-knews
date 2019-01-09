@@ -496,9 +496,9 @@ describe('/api', () => {
         expect(body.message).to.equal('Method Not Allowed');
       }));
     // END USERS TESTS
-    describe('/:user_id', () => {
-      it('200 GET - responds with a user object', () => request
-        .get('/api/users/1')
+    describe('/:username', () => {
+      it('200 GET - responds with a user object ', () => request
+        .get('/api/users/butter_bridge')
         .expect(200)
         .then(({ body }) => {
           const user = body.users[0];
@@ -507,14 +507,8 @@ describe('/api', () => {
           );
           expect(user.username).to.equal('butter_bridge');
         }));
-      it('400 GET - responds with 400 if given a malformed user ID', () => request
-        .get('/api/users/hello')
-        .expect(400)
-        .then(({ body }) => {
-          expect(body.message).to.equal('Error 400 - malformed user ID, should be an integer.');
-        }));
       it('405 - returns error 405 for other requests', () => request
-        .put('/api/users/1')
+        .put('/api/users/butter_bridge')
         .expect(405)
         .then(({ body }) => {
           expect(body.message).to.equal('Method Not Allowed');
