@@ -6,10 +6,10 @@ usersRouter.route('/')
   .get(getUsers)
   .all(handle405);
 
-usersRouter.param('user_id', (req, res, next, id) => {
-  console.log('>>>>>>>>>>', id);
-  if (!Number.isInteger(Number(id))) handle400();
-});
+// usersRouter.param('user_id', (req, res, next, id) => {
+//   console.log('>>>>>>>>>>', id);
+//   if (!Number.isInteger(Number(id))) handle400();
+// });
 
 // usersRouter.param();
 
