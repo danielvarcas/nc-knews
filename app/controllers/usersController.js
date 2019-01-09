@@ -1,14 +1,10 @@
 const connection = require('../../db/connection');
 
-exports.getUsers = (req, res, next) => {
-  const getById = (queryBuilder) => {
-    if (req.params.username) {
-      queryBuilder.where('username', req.params.username);
-    }
-  };
+exports.getUsers = (req, res, next) => connection('users')
+  .then(users => res.status(200).send({ users }))
+  .catch(next);
 
-  return connection('users')
-    .modify(getById)
-    .then(users => res.status(200).send({ users }))
-    .catch(next);
-};
+exports.getUserByUsername = (req, res, next) => connection('users')
+  .where('username', req.params.username)
+  .then(user => res.status(200).send({ user }))
+  .catch(next);
