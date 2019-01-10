@@ -8,6 +8,9 @@ exports.getUserByUsername = (req, res, next) => connection('users')
   .where('username', req.params.username)
   .then((users) => {
     const user = users[0];
-    res.status(200).send(user);
+    if (!user) {
+      return Promise.reject({ status: 404 });
+    }
+    return res.status(200).send({ user });
   })
   .catch(next);

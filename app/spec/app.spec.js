@@ -183,6 +183,18 @@ describe('/api', () => {
           .expect(400);
       });
 
+      it('400 POST - rejects a new post if title or body are empty strings', () => {
+        const anArticle = {
+          user_id: 1,
+          title: '',
+          body: '',
+        };
+        return request
+          .post('/api/topics/cats/articles')
+          .send(anArticle)
+          .expect(400);
+      });
+
       it('404 POST - rejects a new post if topic does not exist', () => {
         const anArticle = {
           title: 'The first rule of Fight Club...',
@@ -498,11 +510,11 @@ describe('/api', () => {
       }));
     // END USERS TESTS
     describe('/:username', () => {
-      it('200 GET - responds with a user object ', () => request
+      it.only('200 GET - responds with a user object ', () => request
         .get('/api/users/butter_bridge')
         .expect(200)
         .then(({ body }) => {
-          const user = body;
+          const { user } = body;
           expect(user).to.have.all.keys(
             'user_id', 'username', 'avatar_url', 'name',
           );

@@ -54,6 +54,8 @@ exports.getArticles = (req, res, next) => {
 exports.postArticle = (req, res, next) => {
   const articleToPost = req.body;
   articleToPost.topic = req.params.topic;
+  if (!articleToPost.title) { articleToPost.title = null; }
+  if (!articleToPost.body) { articleToPost.body = null; }
   return connection('articles').insert(articleToPost).returning('*')
     .then((postedArticle) => {
       const article = { ...postedArticle[0] };
