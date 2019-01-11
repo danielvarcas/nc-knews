@@ -1,4 +1,4 @@
-const { DATABASE_URL } = process.env;
+const { DB_URL } = process.env;
 
 module.exports = {
   development: {
@@ -31,7 +31,7 @@ module.exports = {
   },
   production: {
     client: 'pg',
-    connection: `${DATABASE_URL}?ssl=true`,
+    connection: `${DB_URL}?ssl=true`,
     migrations: {
       directory: './db/migrations',
     },

@@ -18,8 +18,8 @@
     "seed:dev": "npm run migrate:rollback-dev && npm run migrate:latest-dev && NODE_ENV=development knex seed:run --env development",
     "lint-fix": "eslint --fix ./",
     "seed:prod": "DB_URL=$(heroku config:get DATABASE_URL) knex seed:run --env production",
-    "migrate:latest:prod": "DATABASE_URL=$(heroku config:get DATABASE_URL) knex migrate:latest --env production",
-    "migrate:rollback:prod": "DATABASE_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback --env production",
+    "migrate:latest:prod": "DB_URL=$(heroku config:get DATABASE_URL) knex migrate:latest --env production",
+    "migrate:rollback:prod": "DB_URL=$(heroku config:get DATABASE_URL) knex migrate:rollback --env production",
     "start": "node app/listen.js"
   },
   "repository": {
