@@ -34,10 +34,10 @@ exports.getComments = (req, res, next) => {
 
 exports.postComment = (req, res, next) => {
   const newComment = req.body;
+  console.log('NEWCOMMENT >>>>>>>>>>', newComment);
   if (!newComment.body) { newComment.body = null; }
-  const userId = newComment.user_id;
   return connection('users')
-    .where('user_id', '=', userId)
+    .where('user_id', '=', newComment.user_id)
     .then((users) => {
       if (!users.length) res.status(422).send({ message: 'Error 422 - user ID does not exist' });
     })
