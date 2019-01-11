@@ -388,6 +388,17 @@ describe('/api', () => {
             });
         });
 
+        it('400 POST - responds with 400 if comment is undefined', () => {
+          const blankComment = {
+            user_id: 1,
+            body: '',
+          };
+          return request
+            .post('/api/articles/1/comments')
+            .send(blankComment)
+            .expect(400);
+        });
+
         it('422 POST - responds with 422 when given a non-existent user ID', () => {
           const badComment = {
             user_id: 99999,
@@ -510,7 +521,7 @@ describe('/api', () => {
       }));
     // END USERS TESTS
     describe('/:username', () => {
-      it.only('200 GET - responds with a user object ', () => request
+      it('200 GET - responds with a user object ', () => request
         .get('/api/users/butter_bridge')
         .expect(200)
         .then(({ body }) => {
