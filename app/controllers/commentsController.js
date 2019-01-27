@@ -23,7 +23,7 @@ exports.getComments = (req, res, next) => {
       'body',
     )
     .limit(limit)
-    .offset(p - 1)
+    .offset((p - 1) * limit)
     .orderBy(sort_by, sort_ascending ? 'asc' : 'desc')
     .leftJoin('users', 'users.user_id', '=', 'comments.user_id')
     .then((comments) => {
@@ -34,7 +34,6 @@ exports.getComments = (req, res, next) => {
 
 exports.postComment = (req, res, next) => {
   const newComment = req.body;
-  console.log('NEWCOMMENT >>>>>>>>>>', newComment);
   if (!newComment.body) { newComment.body = null; }
   return connection('users')
     .where('user_id', '=', newComment.user_id)
