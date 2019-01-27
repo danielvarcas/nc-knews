@@ -1,37 +1,42 @@
-# BE2-NC-Knews
+# Northcoders News API
 
-## Northcoders News API
+An API built to use with [NC News](https://github.com/danielvarcas/nc-news), a social news 'Reddit-clone' site. The API handles user, article, topic and comment data.
 
-### Background
+### Deployed app
 
-We will be building the API to use in the Northcoders News Sprint during the Front End block of the course.
-
-Our database will be PSQL, and you will interact with it using [Knex](https://knexjs.org).
-
-### NOTE:
-
-For this sprint ensure you have the eslint extension installed in VS-Code as it will help to enforce best practices when you are writing your code.
-
-### Step 1 - Seeding
-
-Data has been provided for both testing and development environments so you will need to write a seed function to seed your database. You should think about how you will write your seed file to use either test data or dev data depending on the environment that you're running in.
+- https://dashboard.heroku.com/apps/dv-knews
 
 
-1. You should have separate tables for topics, articles, users and comments, and you will need to think carefully about the order in which you seed your data.
+### Installing
 
-- Each topic should have:
+```
+git clone https://github.com/danielvarcas/nc-knews.git
+cd nc-knews
+npm install
+npm start
+```
+
+## Running the tests
+
+```
+npm test
+```
+
+## API description
+
+- Each topic has:
 
   - `slug` field which is a unique string that acts as the table's primary key
   - `description` field which is a string giving a brief description of a given topic
 
-- Each user should have:
+- Each user has:
 
   - `user_id` which is the primary key
   - `username`
   - `avatar_url`
   - `name`
 
-- Each article should have:
+- Each article has:
   - `article_id` which is the primary key
   - `title`
   - `body`
@@ -40,7 +45,7 @@ Data has been provided for both testing and development environments so you will
   - `user_id` field that references a user's primary key.
   - `created_at` defaults to the current date
 
-* Each comment should have:
+* Each comment has:
   - `comment_id` which is the primary key
   - `user_id` field that references a user's primary key
   - `article_id` field that references an article's primary key
@@ -48,29 +53,16 @@ Data has been provided for both testing and development environments so you will
   - `created_at` defaults to the current date
   - `body`
 
-- NOTE: psql expects Date types to be in a date format - not a timestamp! However, you can easily turn a timestamp into a date using js...
-
-
-### Step 2 - Building and Testing
-
-1.  Build your Express app
-2.  Mount an API Router onto your app
-3.  Define the routes described below
-4.  Define controller functions for each of your routes.
-5.  Use proper project configuration from the offset, being sure to treat development and test differently.
-6.  Test each route **as you go**, checking both successful requests and the variety of errors you could expect to encounter.
-
-**HINT** You will need to take advantage of knex migrations in order to efficiently test your application.
 
 ### Routes
 
-Your server should have the following end-points:
+The server has the following end-points:
 
 ```http
 GET /api/topics
 ```
 
-- responds with an array of topic objects - each object should have a `slug` and `description` property.
+- responds with an array of topic objects - each object has a `slug` and `description` property.
 
 ```http
 POST /api/topics
@@ -84,26 +76,22 @@ GET /api/topics/:topic/articles
 ```
 
 - responds with an array of article objects for a given topic
-- each article should have:
+- each article has:
   - `author` which is the `username` from the users table,
   - `title`
   - `article_id`
   - `votes`
-  - `comment_count` which is the accumulated count of all the comments with this article_id. You should make use of knex queries in order to achieve this.
+  - `comment_count` which is the accumulated count of all the comments with this article_id.
   - `created_at`
   - `topic`
 
 Queries
 
-- This route should accept the following queries:
+- This route accepts the following queries:
   - `limit`, which limits the number of responses (defaults to 10)
   - `sort_by`, which sorts the articles by any valid column (defaults to date)
   - `p`, stands for page which specifies the page at which to start (calculated using limit)
   - `sort_ascending`, when "true" returns the results sorted in ascending order (defaults to descending)
-
-
-## IMPORTANT:
-* Both `comments` and `articles` data in the test-data are given ordered in descending order of time : this will be useful to you when it comes to writing your tests!
 
 
 ```http
@@ -118,18 +106,18 @@ GET /api/articles
 ```
 
 - responds with an array of article objects
-- each article should have:
+- each article has:
   - `author` which is the `username` from the users table,
   - `title`
   - `article_id`
   - `votes`
-  - `comment_count` which is the accumulated count of all the comments with this article_id. You should make use of knex queries in order to achieve this.
+  - `comment_count` which is the accumulated count of all the comments with this article_id.
   - `created_at`
   - `topic`
 
 Queries
 
-- This route should accept the following queries:
+- This route accepts the following queries:
   - `limit`, which limits the number of responses (defaults to 10)
   - `sort_by`, which sorts the articles by any valid column (defaults to date)
   - `p`, stands for page which specifies the page at which to start (calculated using limit)
@@ -141,7 +129,7 @@ GET /api/articles/:article_id
 ```
 
 - responds with an article object
-- each article should have:
+- each article has:
   - `article_id`
   - `author` which is the `username` from the users table,
   - `title`
@@ -156,7 +144,7 @@ PATCH /api/articles/:article_id
 ```
 
 - accepts an object in the form `{ inc_votes: newVote }`
-  - `newVote` will indicate how much the `votes` property in the database should be updated by
+  - `newVote` indicates how much the `votes` property in the database should be updated by
     E.g `{ inc_votes : 1 }` would increment the current article's vote property by 1
     `{ inc_votes : -100 }` would decrement the current article's vote property by 100
 
@@ -164,15 +152,15 @@ PATCH /api/articles/:article_id
 DELETE /api/articles/:article_id
 ```
 
-- should delete the given article by `article_id`
-- should respond with an empty object
+- deletes the given article by `article_id`
+- responds with an empty object
 
 ```http
 GET /api/articles/:article_id/comments
 ```
 
 - responds with an array of comments for the given `article_id`
-- each comment should have
+- each comment has
   - `comment_id`
   - `votes`
   - `created_at`
@@ -181,7 +169,7 @@ GET /api/articles/:article_id/comments
 
 Queries
 
-- This route should accept the following queries:
+- This route accepts the following queries:
 
 * limit, which limits the number of responses (defaults to 10)
 * sort_by, which sorts the articles by any valid column (defaults to date)
@@ -208,15 +196,15 @@ PATCH /api/articles/:article_id/comments/:comment_id
 DELETE /api/articles/:article_id/comments/:comment_id
 ```
 
-- should delete the given comment by `comment_id`
-- should respond with an empty object
+- deletes the given comment by `comment_id`
+- responds with an empty object
 
 ```http
 GET /api/users
 ```
 
-- should respond with an array of user objects
-- each user object should have
+- responds with an array of user objects
+- each user object has
   - `user_id`
   - `username`
   - `avatar_url`
@@ -226,8 +214,8 @@ GET /api/users
 GET /api/users/:user_id
 ```
 
-- should respond with a user object
-- each user should have
+- responds with a user object
+- each user has
   - `user_id`
   - `username`
   - `avatar_url`
@@ -237,14 +225,23 @@ GET /api/users/:user_id
 GET /api
 ```
 
-- Serves JSON describing all the available endpoints on your API
+- Serves JSON describing all the available endpoints on the API
 
-### Step 3 - Hosting
+## Built With
 
-Make sure your application and your database is hosted using heroku
+* [bodyparser](https://www.npmjs.com/package/body-parser)
+* [chai](https://www.npmjs.com/package/chai)
+* [cors](https://www.npmjs.com/package/cors)
+* [express](https://www.npmjs.com/package/express)
+* [knex.js](https://www.npmjs.com/package/knex)
+* [mocha](https://www.npmjs.com/package/mocha)
+* [pg-promise](https://www.npmjs.com/package/pg-promise)
+* [SuperTest](https://www.npmjs.com/package/supertest)
 
-### Step 4 - Preparing for your review and portfolio
+## Authors
 
-Finally, you should write a README for this project (and remove this one). The README should be broken down like this: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
+* **Daniel Varcas** - [Daniel Varcas](https://github.com/danielvarcas)
 
-It should also include the link where your herokuapp is hosted.
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
