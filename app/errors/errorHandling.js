@@ -1,5 +1,4 @@
 exports.handle400 = (err, req, res, next) => {
-  console.log(err);
   const codes = {
     23502: 'Invalid input: one or more required keys missing.',
     42703: 'Invalid input: column does not exist in database.',
